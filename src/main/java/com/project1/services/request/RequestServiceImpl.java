@@ -50,21 +50,13 @@ public class RequestServiceImpl implements RequestService {
         //2. queue is full
         //3. difference between first and last is 1+ second
         //all otehr cases - compliant
-        CircularFifoQueue<LocalDate> buff = countryRequestMap.get(country);
+        CircularFifoQueue<LocalDate> buff = countryRequestMap.getOrDefault(country, new CircularFifoQueue<>(AppDefaults.NUMBER_OF_SESSIONS_PER_SECOND));
         LocalDate now = LocalDate.now();
-        if (buff == null){
-            //create it
-            buff = new CircularFifoQueue<>(AppDefaults.NUMBER_OF_SESSIONS_PER_SECOND);
-            buff.add(now);
-            countryRequestMap.put(country, buff);
-            return true;
-        } else if (!buff.isFull()) {
-            buff.add(now);
-            countryRequestMap.put(country, buff);
+        buff.add(now);
+        countryRequestMap.put(country, buff);
+        if (!buff.isFull()){
             return true;
         } else {
-            buff.add(LocalDate.now());
-            countryRequestMap.put(country, buff);
             LocalDate first = buff.get(0);
             return ChronoUnit.SECONDS.between(first, now) < 1;
         }
