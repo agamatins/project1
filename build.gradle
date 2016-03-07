@@ -29,10 +29,11 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("com.sun.jersey:jersey-client:1.19")
+    compile("org.apache.commons:commons-collections4:4.1")
     compile("com.h2database:h2")
     testCompile("junit:junit")
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '2.11'
 }

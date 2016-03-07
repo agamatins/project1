@@ -1,10 +1,16 @@
 package com.project1.services.request;
 
 import com.project1.utils.AppDefaults;
+import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.springframework.stereotype.Service;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 
 @Service("requestService")
@@ -32,5 +38,35 @@ public class RequestServiceImpl implements RequestService {
         String country = response.getEntity(String.class);
         //for all abnormal cases this service returns XX. Since we don't have such country - we'd better return out default country
         return (country.equals("XX") ? AppDefaults.DEFAULT_COUNTRY : country);
+    }
+
+    //since it's singletone by default - it should be thread safe!
+    private ConcurrentMap<String, CircularFifoQueue<LocalDate>> countryRequestMap = new ConcurrentHashMap<>();
+
+    @Override
+    public boolean isSpamCompliant(String country) {
+        //when it's failed:
+        //1. country is in map
+        //2. queue is full
+        //3. difference between first and last is 1+ second
+        //all otehr cases - compliant
+        CircularFifoQueue<LocalDate> buff = countryRequestMap.get(country);
+        LocalDate now = LocalDate.now();
+        if (buff == null){
+            //create it
+            buff = new CircularFifoQueue<>(AppDefaults.NUMBER_OF_SESSIONS_PER_SECOND);
+            buff.add(now);
+            countryRequestMap.put(country, buff);
+            return true;
+        } else if (!buff.isFull()) {
+            buff.add(now);
+            countryRequestMap.put(country, buff);
+            return true;
+        } else {
+            buff.add(LocalDate.now());
+            countryRequestMap.put(country, buff);
+            LocalDate first = buff.get(0);
+            return ChronoUnit.SECONDS.between(first, now) < 1;
+        }
     }
 }
