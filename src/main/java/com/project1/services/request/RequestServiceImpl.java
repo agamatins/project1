@@ -62,7 +62,8 @@ public class RequestServiceImpl implements RequestService {
             return true;
         } else {
             LocalTime first = buff.get(0);
-            return ChronoUnit.SECONDS.between(first, now) > 1;
+            logger.info("Millis diff: " + ChronoUnit.MILLIS.between(first, now));
+            return ChronoUnit.MILLIS.between(first, now) > 999;
         }
     }
 }
