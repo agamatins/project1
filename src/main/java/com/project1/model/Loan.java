@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 
 @Entity
@@ -58,8 +60,8 @@ public class Loan {
 
     protected Loan() {}
 
-    public Loan(String amount, Customer customer){
-        this.amount = new BigDecimal(amount);
+    public Loan(BigDecimal amount, Customer customer){
+        this.amount = amount;
         this.customer = customer;
     }
 }

@@ -1,26 +1,24 @@
 package com.project1.model;
 
-import com.project1.utils.AppDefaults;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 public class LoanApplication {
     @NotBlank(message="customerId cannot be empty")
     private String customerId;
     @NotBlank(message="firstName cannot be empty")
+    @Pattern(regexp = "^[A-Za-z]*$", message="firstName should contain only letters")
     private String firstName;
     @NotBlank(message="lastName cannot be empty")
+    @Pattern(regexp = "^[A-Za-z]*$", message="lastName should contain only letters")
     private String lastName;
     @NotNull(message="amount cannot be empty")
     @Digits(fraction = 2,integer = 4, message="Incorrect amount format")
     @Min(value=0, message="Loan amount should not be less than minimum")
     @Max(value=1000, message="Loan amount should not be more than maximum")
-    private String amount;
+    private BigDecimal amount;
 
     public String getCustomerId() {
         return customerId;
@@ -46,11 +44,11 @@ public class LoanApplication {
         this.lastName = lastName;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 }

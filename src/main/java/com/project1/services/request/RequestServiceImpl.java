@@ -2,12 +2,15 @@ package com.project1.services.request;
 
 import com.project1.utils.AppDefaults;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -15,6 +18,7 @@ import java.util.concurrent.ConcurrentMap;
 
 @Service("requestService")
 public class RequestServiceImpl implements RequestService {
+    final static Logger logger = LogManager.getLogger(RequestServiceImpl.class);
 
     @Override
     public String getCountry(String ip) {
@@ -25,13 +29,13 @@ public class RequestServiceImpl implements RequestService {
 
         //we might not even get any response
         if (response == null) {
-            System.out.println("Cannot get response from Country Detection Service");
+            logger.info("Cannot get response from Country Detection Service");
             return AppDefaults.DEFAULT_COUNTRY;
         }
 
         //or we might get something weird in response
         if (response.getStatus() != 200) {
-            System.out.println("Wrong response from Country Detection Service " + response.getStatus());
+            logger.info("Wrong response from Country Detection Service " + response.getStatus());
             return AppDefaults.DEFAULT_COUNTRY;
         }
 
@@ -41,7 +45,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     //since it's singletone by default - it should be thread safe!
-    private ConcurrentMap<String, CircularFifoQueue<LocalDate>> countryRequestMap = new ConcurrentHashMap<>();
+    private ConcurrentMap<String, CircularFifoQueue<LocalTime>> countryRequestMap = new ConcurrentHashMap<>();
 
     @Override
     public boolean isSpamCompliant(String country) {
@@ -50,15 +54,15 @@ public class RequestServiceImpl implements RequestService {
         //2. queue is full
         //3. difference between first and last is 1+ second
         //all otehr cases - compliant
-        CircularFifoQueue<LocalDate> buff = countryRequestMap.getOrDefault(country, new CircularFifoQueue<>(AppDefaults.NUMBER_OF_SESSIONS_PER_SECOND));
-        LocalDate now = LocalDate.now();
+        CircularFifoQueue<LocalTime> buff = countryRequestMap.getOrDefault(country, new CircularFifoQueue<>(AppDefaults.NUMBER_OF_SESSIONS_PER_SECOND));
+        LocalTime now = LocalTime.now();
         buff.add(now);
         countryRequestMap.put(country, buff);
-        if (!buff.isFull()){
+        if (!buff.isAtFullCapacity()){
             return true;
         } else {
-            LocalDate first = buff.get(0);
-            return ChronoUnit.SECONDS.between(first, now) < 1;
+            LocalTime first = buff.get(0);
+            return ChronoUnit.SECONDS.between(first, now) > 1;
         }
     }
 }
