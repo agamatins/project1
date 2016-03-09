@@ -4,6 +4,7 @@ import com.project1.utils.AppDefaults;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -20,12 +21,17 @@ import java.util.concurrent.ConcurrentMap;
 public class RequestServiceImpl implements RequestService {
     final static Logger logger = LogManager.getLogger(RequestServiceImpl.class);
 
+    @Autowired
+    CountryResolverService countryResolverService;
+
     @Override
     public String getCountry(String ip) {
-        //hello Jersey, long time no seen;)
-        Client client = Client.create();
-        WebResource webResource = client.resource(AppDefaults.REQUEST_COUNTRY_BASE_URL + ip);
-        ClientResponse response = webResource.accept("text/html").get(ClientResponse.class);
+        if (org.springframework.util.StringUtils.isEmpty(ip)){
+            logger.info("Ip not detected from request.");
+            return AppDefaults.DEFAULT_COUNTRY;
+        }
+
+        ClientResponse response = countryResolverService.getCountry(ip);
 
         //we might not even get any response
         if (response == null) {
@@ -45,6 +51,8 @@ public class RequestServiceImpl implements RequestService {
     }
 
     //since it's singletone by default - it should be thread safe!
+    //cotnains CircularFifoQueue of timestamps of N last requests for each country ever trying to apply.
+    //New request replaces added to the end of queue, first one is pushed out and all other moved one step towards the beginning
     private ConcurrentMap<String, CircularFifoQueue<LocalTime>> countryRequestMap = new ConcurrentHashMap<>();
 
     @Override
@@ -62,7 +70,7 @@ public class RequestServiceImpl implements RequestService {
             return true;
         } else {
             LocalTime first = buff.get(0);
-            logger.info("Millis diff: " + ChronoUnit.MILLIS.between(first, now));
+            logger.debug("Millis diff: " + ChronoUnit.MILLIS.between(first, now));
             return ChronoUnit.MILLIS.between(first, now) > 999;
         }
     }
