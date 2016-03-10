@@ -23,7 +23,8 @@ amount : Numeric in format xxxx.xx (min=1, max=1000) (Mandatory)
 Except of above mentioned requirements following validation rules are applied: 
   - Should be not more than 2 requests per seconf from the same country
   - If user with requested customerId already exist in the database provided firstName and lastName must match ones in the database
-  - If user with requested customerId already exist in the database it should not be blacklisted
+  - If user with requested customerId already exist in the database it should not be blacklisted  
+
 Expected success response: 201 CREATED 
 
 
@@ -68,7 +69,8 @@ params:
 id : String (Mandatory)  
 Following validation rules are applied: 
   - User with given id should exist in the database
-  - User with given id should not be already blacklisted
+  - User with given id should not be already blacklisted  
+
 Expected success response: 200 OK
 
 
