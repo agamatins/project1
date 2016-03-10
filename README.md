@@ -1,7 +1,7 @@
-<b>To build:</b> 
+<b>To build:</b>  
 gradle build
 
-<b>To run:</b>  
+<b>To start server:</b>  
 java -jar build/lib/project1-1.0.0.jar  
 
 <b>To execute on Linux:</b>  
