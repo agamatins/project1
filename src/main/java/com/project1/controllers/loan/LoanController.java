@@ -95,7 +95,7 @@ public class LoanController {
         return new ResponseEntity<>(loan, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/loans/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/loans/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> findAllLoans() {
         logger.info("Finding All Approved Loan Applications");
         Iterable<Loan> loans = loanRepository.findAll();
@@ -133,19 +133,19 @@ public class LoanController {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         logger.error(ex.getMessage());
-        return new ResponseEntity<Message>(new Message(MessageType.ERROR, "Invalid request body. Please check readme."), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<Message>(new Message(MessageType.ERROR, AppDefaults.BAD_REQUEST_DEFAULT_MESSAGE), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<?> handleNumberFormatException(NumberFormatException ex) {
         logger.error(ex.getMessage());
-        return new ResponseEntity<Message>(new Message(MessageType.ERROR, "Invalid request body. Please check readme."), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<Message>(new Message(MessageType.ERROR, AppDefaults.BAD_REQUEST_DEFAULT_MESSAGE), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         logger.error(ex.getMessage());
-        return new ResponseEntity<Message>(new Message(MessageType.ERROR, "Invalid request body. Please check readme."), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<Message>(new Message(MessageType.ERROR, AppDefaults.BAD_REQUEST_DEFAULT_MESSAGE), HttpStatus.BAD_REQUEST);
     }
 
 }
