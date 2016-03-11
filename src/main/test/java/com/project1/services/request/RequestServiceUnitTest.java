@@ -22,7 +22,7 @@ public class RequestServiceUnitTest {
                 }
         );
         try {
-            Thread.sleep(1000);
+            Thread.sleep(1001);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -51,7 +51,7 @@ public class RequestServiceUnitTest {
         );
         assertFalse(service.isSpamCompliant("LV"));
         try {
-            Thread.sleep(1000);
+            Thread.sleep(1001);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

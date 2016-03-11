@@ -1,13 +1,9 @@
 package com.project1.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -29,7 +25,7 @@ public class Customer {
     @Column(name="CUST_BLACKLIST")
     private boolean blacklisted = false;
 
-    @OneToMany(mappedBy="customer")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy="customer", cascade = CascadeType.ALL)
     private List<Loan> loans;
 
     public String getId() {

@@ -70,7 +70,7 @@ public class RequestServiceImpl implements RequestService {
             return true;
         } else {
             LocalTime first = buff.get(0);
-            logger.debug("Millis diff: " + ChronoUnit.MILLIS.between(first, now));
+            logger.debug(country + ": Millis diff: " + ChronoUnit.MILLIS.between(first, now));
             return ChronoUnit.MILLIS.between(first, now) > 1000;
         }
     }
