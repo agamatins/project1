@@ -16,7 +16,7 @@ public class LoanApplication {
     private String lastName;
     @NotNull(message="amount cannot be empty")
     @Digits(fraction = 2,integer = 4, message="Incorrect amount format")
-    @Min(value=1, message="Loan amount should not be less than 0")
+    @Min(value=1, message="Loan amount should not be less than 1")
     @Max(value=1000, message="Loan amount should not be more than 1000")
     private BigDecimal amount;
 
