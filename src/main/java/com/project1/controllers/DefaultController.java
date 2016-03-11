@@ -13,7 +13,7 @@ public class DefaultController {
 
     @RequestMapping
     public ResponseEntity<?> forwardRequest() {
-        return new ResponseEntity<Message>(new Message(MessageType.ERROR, AppDefaults.BAD_REQUEST_DEFAULT_MESSAGE), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Message(MessageType.ERROR, AppDefaults.BAD_REQUEST_DEFAULT_MESSAGE), HttpStatus.BAD_REQUEST);
     }
 
 }

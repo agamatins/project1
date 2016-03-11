@@ -133,19 +133,19 @@ public class LoanController {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         logger.error(ex.getMessage());
-        return new ResponseEntity<Message>(new Message(MessageType.ERROR, AppDefaults.BAD_REQUEST_DEFAULT_MESSAGE), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Message(MessageType.ERROR, AppDefaults.BAD_REQUEST_DEFAULT_MESSAGE), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<?> handleNumberFormatException(NumberFormatException ex) {
         logger.error(ex.getMessage());
-        return new ResponseEntity<Message>(new Message(MessageType.ERROR, AppDefaults.BAD_REQUEST_DEFAULT_MESSAGE), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Message(MessageType.ERROR, AppDefaults.BAD_REQUEST_DEFAULT_MESSAGE), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         logger.error(ex.getMessage());
-        return new ResponseEntity<Message>(new Message(MessageType.ERROR, AppDefaults.BAD_REQUEST_DEFAULT_MESSAGE), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Message(MessageType.ERROR, AppDefaults.BAD_REQUEST_DEFAULT_MESSAGE), HttpStatus.BAD_REQUEST);
     }
 
 }
