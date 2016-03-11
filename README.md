@@ -1,7 +1,7 @@
-<b>To build:</b> 
+<b>To build:</b>  
 gradle build
 
-<b>To run:</b>  
+<b>To start server:</b>  
 java -jar build/lib/project1-1.0.0.jar  
 
 <b>To execute on Linux:</b>  
@@ -20,10 +20,12 @@ customerId : String (Mandatory)
 firstName : String (Mandatory), should contains latin letters only  
 lastName : String (Mandatory), should contains latin letters only  
 amount : Numeric in format xxxx.xx (min=1, max=1000) (Mandatory)   
+
 Except of above mentioned requirements following validation rules are applied: 
   - Should be not more than 2 requests per seconf from the same country
   - If user with requested customerId already exist in the database provided firstName and lastName must match ones in the database
-  - If user with requested customerId already exist in the database it should not be blacklisted
+  - If user with requested customerId already exist in the database it should not be blacklisted  
+
 Expected success response: 201 CREATED 
 
 
@@ -39,6 +41,7 @@ Example of success response body: [{"id":1,"amount":200.34,"customer":{"id":"232
 UR: GET http://localhost:8080/loan/{id}  
 params:  
 id : Long (Mandatory)  
+
 Expected success response: 200 OK  
 Example of success response body: {"id":1,"amount":200.34,"customer":{"id":"2323","firstName":"Name","lastName":"Surname","blacklisted":false},"applicationCountry":"LV"}
 
@@ -48,6 +51,7 @@ Example of success response body: {"id":1,"amount":200.34,"customer":{"id":"2323
 URL: GET http://localhost:8080/loans/user/{customerId}  
 params:  
 customerId : String (Mandatory)  
+
 Expected success response: 200 OK  
 Example of success response body: [{"id":1,"amount":200.34,"customer":{"id":"2323","firstName":"Name","lastName":"Surname","blacklisted":false},"applicationCountry":"LV"},{"id":2,"amount":888.88,"customer":{"id":"2323","firstName":"Name","lastName":"Surname","blacklisted":false},"applicationCountry":"LV"}] 
 
@@ -57,6 +61,7 @@ Example of success response body: [{"id":1,"amount":200.34,"customer":{"id":"232
 URL: GET http://localhost:8080/customer/{id}  
 params:  
 id : String (Mandatory)  
+
 Expected success response: 200 OK  
 Example of success response body: {"id":"2323","firstName":"Name","lastName":"Surname","blacklisted":false} 
 
@@ -66,9 +71,11 @@ Example of success response body: {"id":"2323","firstName":"Name","lastName":"Su
 URL: POST http://localhost:8080/customer/blacklist/{id}  
 params:  
 id : String (Mandatory)  
+
 Following validation rules are applied: 
   - User with given id should exist in the database
-  - User with given id should not be already blacklisted
+  - User with given id should not be already blacklisted  
+
 Expected success response: 200 OK
 
 
