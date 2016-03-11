@@ -67,8 +67,8 @@ Example of success response body: {"id":"2323","firstName":"Name","lastName":"Su
 
 
 
-**To mark customer as blacklisted by customerId:** 
-URL: POST http://localhost:8080/customer/blacklist/{id}  
+**To mark customer as blacklisted by customerId:**   
+URL: PUT http://localhost:8080/customer/blacklist/{id}  
 params:  
 id : String (Mandatory)  
 
