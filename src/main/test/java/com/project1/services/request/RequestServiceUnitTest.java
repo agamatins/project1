@@ -58,4 +58,30 @@ public class RequestServiceUnitTest {
         assertTrue(service.isSpamCompliant("RU"));
         assertTrue(service.isSpamCompliant("LV"));
     }
+
+    @Test
+    public void testSpamCompliance_DifferentCountries_SeparateThreads(){
+        RequestService service = new RequestServiceImpl();
+        new Thread(() -> {
+            assertTrue(service.isSpamCompliant("LV"));
+        }).start();
+        new Thread(() -> {
+            assertTrue(service.isSpamCompliant("RU"));
+        }).start();
+        new Thread(() -> {
+            assertTrue(service.isSpamCompliant("RU"));
+        }).start();
+        new Thread(() -> {
+            assertTrue(service.isSpamCompliant("LV"));
+        }).start();
+
+        assertFalse(service.isSpamCompliant("LV"));
+        try {
+            Thread.sleep(1001);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertTrue(service.isSpamCompliant("RU"));
+        assertTrue(service.isSpamCompliant("LV"));
+    }
 }
