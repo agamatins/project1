@@ -38,7 +38,7 @@ Example of success response body: [{"id":1,"amount":200.34,"customer":{"id":"232
 
 
 **To retrieve single loan by id:**  
-UR: GET http://localhost:8080/loan/{id}  
+URL: GET http://localhost:8080/loan/{id}  
 params:  
 id : Long (Mandatory)  
 
