@@ -62,7 +62,6 @@ public class RequestServiceImpl implements RequestService {
         //2. queue is full
         //3. difference between first and last is 1+ second
         //all otehr cases - compliant
-        //due to my bloody VM works
         synchronized (this) {
             CircularFifoQueue<LocalTime> buff = countryRequestMap.getOrDefault(country, new CircularFifoQueue<>(AppDefaults.NUMBER_OF_SESSIONS_PER_SECOND + 1));
             LocalTime now = LocalTime.now();
@@ -72,7 +71,7 @@ public class RequestServiceImpl implements RequestService {
                 return true;
             } else {
                 LocalTime first = buff.get(0);
-                logger.info(country + ": Millis diff: " + ChronoUnit.MILLIS.between(first, now));
+                logger.debug(country + ": Millis diff: " + ChronoUnit.MILLIS.between(first, now));
                 return ChronoUnit.MILLIS.between(first, now) > 1000;
             }
         }
